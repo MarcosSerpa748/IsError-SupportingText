@@ -10,22 +10,26 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 @HiltViewModel
 class TelaCadastroViewModel@Inject constructor(private val inserirUsuarioUseCase: InserirUsuarioUseCase): ViewModel(){
     private val _nome = MutableStateFlow("")
     private val _idade = MutableStateFlow("")
-    private val _erro = MutableStateFlow(false)
+    private val _erroCampoNome = MutableStateFlow(false)
+    private val _erroCampoIdade = MutableStateFlow(false)
     private val _mensagemErro = MutableStateFlow("")
 
     val uiState = combine(
         _nome,
         _idade,
-        _erro,
+        _erroCampoNome,
+        _erroCampoIdade,
         _mensagemErro
-    ){nome,idade,erro,mensagemErro ->
-        TelaCadastroUIState(nome = nome,idade = idade, erro = erro,mensagemErro = mensagemErro)
+    ){nome,idade,erroCampoNome,erroCampoIdade,mensagemErro ->
+        TelaCadastroUIState(nome = nome,idade = idade, erroCampoNome = erroCampoNome, erroCampoIdade = erroCampoIdade,mensagemErro = mensagemErro)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),
@@ -45,11 +49,19 @@ class TelaCadastroViewModel@Inject constructor(private val inserirUsuarioUseCase
                 inserirUsuarioUseCase(nome = _nome.value,idade = _idade.value)
                 alterarNome("")
                 alterarIdade("")
-                _erro.value = false
+                _erroCampoNome.value = false
+                _erroCampoIdade.value = false
                 _mensagemErro.value = ""
-            }catch (e: Exception){
-                _erro.value = true
+
+            }catch (e: IllegalArgumentException){
+                _erroCampoNome.value = true
                 _mensagemErro.value = "${e.message}"
+                _erroCampoIdade.value = false
+
+            }catch(e: IllegalStateException){
+                _erroCampoIdade.value = true
+                _mensagemErro.value = "${e.message}"
+                _erroCampoNome.value = false
             }
         }
     }

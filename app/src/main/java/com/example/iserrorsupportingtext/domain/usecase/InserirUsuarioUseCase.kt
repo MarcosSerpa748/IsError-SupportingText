@@ -1,6 +1,7 @@
 package com.example.iserrorsupportingtext.domain.usecase
 
 import com.example.iserrorsupportingtext.data.repository.UsuarioRepository
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class InserirUsuarioUseCase@Inject constructor(private val repositorio: UsuarioRepository){
@@ -8,10 +9,10 @@ class InserirUsuarioUseCase@Inject constructor(private val repositorio: UsuarioR
     suspend operator fun invoke(nome:String,idade: String){
 
         if (nome.isBlank()){
-            throw Exception("O campo de nome está vazio!")
+            throw IllegalArgumentException("O campo de nome está vazio!")
         }
         if (idade.isBlank()){
-            throw Exception("O campo de idade está vazio!")
+            throw IllegalStateException("O campo de idade está vazio!")
         }
 
         repositorio.inserirUsuario(nome = nome,idade = idade)

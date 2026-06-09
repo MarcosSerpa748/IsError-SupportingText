@@ -37,14 +37,15 @@ fun TelaCadastro(viewModel: TelaCadastroViewModel = hiltViewModel()){
             label = {Text(text = "Seu nome:")},
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
                 unfocusedLabelColor = Color.Black,
                 cursorColor = Color.Black,
                 focusedLabelColor = Color.Black,
                 focusedBorderColor = Color.Black,
                 unfocusedBorderColor = Color.Black),
-            isError = uiState.erro,
+            isError = uiState.erroCampoNome,
             supportingText = {
-                if (uiState.erro){
+                if (uiState.erroCampoNome){
                     Text(text = uiState.mensagemErro)
                 }
             })
@@ -56,14 +57,15 @@ fun TelaCadastro(viewModel: TelaCadastroViewModel = hiltViewModel()){
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
                 unfocusedLabelColor = Color.Black,
                 cursorColor = Color.Black,
                 focusedLabelColor = Color.Black,
                 focusedBorderColor = Color.Black,
                 unfocusedBorderColor = Color.Black),
-            isError = uiState.erro,
+            isError = uiState.erroCampoIdade,
             supportingText = {
-                if (uiState.erro)
+                if (uiState.erroCampoIdade)
                     Text(text = uiState.mensagemErro)
             })
 
